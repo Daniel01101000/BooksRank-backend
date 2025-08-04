@@ -6,7 +6,16 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+
+// Solo permitimos estos orígenes:
+app.use(cors({
+  origin: [
+    "http://localhost:5173",             
+    "https://daniel01101000.github.io",
+    "https://booksrank.onrender.com"  
+  ]
+}));
+
 app.use(express.json());
 
 const pool = mysql.createPool({
@@ -45,7 +54,6 @@ app.get("/books", async (req, res) => {
   }
 });
 
-// Endpoint para probar conexión y tablas en la BD
 app.get("/test-db", async (req, res) => {
   try {
     const [tables] = await pool.query("SHOW TABLES");
