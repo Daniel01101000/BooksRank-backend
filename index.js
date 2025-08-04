@@ -1,4 +1,4 @@
-import express from "express";
+import express from "express"; 
 import cors from "cors";
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
@@ -11,7 +11,7 @@ app.use(express.json());
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
+  port: process.env.DB_PORT,        // asegúrate de que esta variable esté definida o elimina esta línea si usas el puerto por defecto
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
@@ -37,7 +37,7 @@ app.get("/books", async (req, res) => {
     const [rows] = await pool.query("SELECT id, title, author, genero, rating FROM books");
     res.json(rows);
   } catch (err) {
-    console.error("Error en GET /books:", err);
+    console.error("Error en GET /books:", err);  // <-- Aquí está el log que te ayudará a ver el problema exacto en Render
     res.status(500).json({ error: err.message });
   }
 });
@@ -46,7 +46,6 @@ app.get("/", (req, res) => {
   res.send("API de BookRank funcionando 🚀");
 });
 
-// Aquí arranca el servidor y muestra el mensaje
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor backend corriendo en http://localhost:${PORT}`);
