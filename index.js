@@ -11,7 +11,7 @@ app.use(express.json());
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
-  port: process.env.DB_PORT,        // asegúrate de que esta variable esté definida o elimina esta línea si usas el puerto por defecto
+  port: Number(process.env.DB_PORT) || 3306,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
@@ -33,11 +33,14 @@ app.post("/books", async (req, res) => {
 });
 
 app.get("/books", async (req, res) => {
+  console.log("Petición GET /books recibida");
   try {
+    console.log("Intentando consultar libros...");
     const [rows] = await pool.query("SELECT id, title, author, genero, rating FROM books");
+    console.log("Consulta exitosa, filas obtenidas:", rows.length);
     res.json(rows);
   } catch (err) {
-    console.error("Error en GET /books:", err);  // <-- Aquí está el log que te ayudará a ver el problema exacto en Render
+    console.error("Error en GET /books:", err);
     res.status(500).json({ error: err.message });
   }
 });
