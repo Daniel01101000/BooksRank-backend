@@ -45,6 +45,18 @@ app.get("/books", async (req, res) => {
   }
 });
 
+// Endpoint para probar conexión y tablas en la BD
+app.get("/test-db", async (req, res) => {
+  try {
+    const [tables] = await pool.query("SHOW TABLES");
+    console.log("Tablas en la base de datos:", tables);
+    res.json(tables);
+  } catch (err) {
+    console.error("Error en /test-db:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get("/", (req, res) => {
   res.send("API de BookRank funcionando 🚀");
 });
